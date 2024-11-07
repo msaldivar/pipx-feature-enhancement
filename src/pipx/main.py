@@ -1022,13 +1022,13 @@ def _setup_log_file(pipx_log_dir: Optional[Path] = None) -> Path:
     # don't use utils.mkdir, to prevent emission of log message
     pipx_log_dir.mkdir(parents=True, exist_ok=True)
 
-    delete_oldest_logs(list(pipx_log_dir.glob("cmd_*[0-9].log")), max_logs)
+    delete_oldest_logs(list(pipx_log_dir.glob("cmd_*.log")), max_logs)
     delete_oldest_logs(list(pipx_log_dir.glob("cmd_*_pip_errors.log")), max_logs)
 
     datetime_str = time.strftime("%Y-%m-%d_%H.%M.%S")
     log_file = pipx_log_dir / f"cmd_{datetime_str}.log"
     counter = 1
-    while log_file.exists() and counter < 10:
+    while log_file.exists() and counter < max_logs:
         log_file = pipx_log_dir / f"cmd_{datetime_str}_{counter}.log"
         counter += 1
 

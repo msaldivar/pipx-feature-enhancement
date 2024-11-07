@@ -249,9 +249,7 @@ def run_pipx_command(args: argparse.Namespace, subparsers: Dict[str, argparse.Ar
         python_flag_passed = bool(args.python)
         fetch_missing_python = args.fetch_missing_python
         try:
-            interpreter = find_python_interpreter(
-                args.python or DEFAULT_PYTHON, fetch_missing_python=fetch_missing_python
-            )
+            interpreter = find_python_interpreter(args.python or DEFAULT_PYTHON, fetch_missing_python=fetch_missing_python)
             args.python = interpreter
         except InterpreterResolutionError as e:
             logger.debug("Failed to resolve interpreter:", exc_info=True)
@@ -462,9 +460,7 @@ def add_python_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--fetch-missing-python",
         action="store_true",
-        help=(
-            "Whether to fetch a standalone python build from GitHub if the specified python version is not found locally on the system."
-        ),
+        help=("Whether to fetch a standalone python build from GitHub if the specified python version is not found locally on the system."),
     )
 
 
@@ -488,8 +484,7 @@ def _add_install(subparsers: argparse._SubParsersAction, shared_parser: argparse
         "--suffix",
         default="",
         help=(
-            "Optional suffix for virtual environment and executable names. "
-            "NOTE: The suffix feature is experimental and subject to change."
+            "Optional suffix for virtual environment and executable names. " "NOTE: The suffix feature is experimental and subject to change."
         ),
     )
     add_python_options(p)
@@ -779,9 +774,7 @@ def _add_list(subparsers: argparse._SubParsersAction, shared_parser: argparse.Ar
     g.add_argument("--skip-maintenance", action="store_true", help="(deprecated) No-op")
 
 
-def _add_interpreter(
-    subparsers: argparse._SubParsersAction, shared_parser: argparse.ArgumentParser
-) -> argparse.ArgumentParser:
+def _add_interpreter(subparsers: argparse._SubParsersAction, shared_parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     p: argparse.ArgumentParser = subparsers.add_parser(
         "interpreter",
         help="Interact with interpreters managed by pipx",
@@ -892,19 +885,13 @@ def _add_ensurepath(subparsers: argparse._SubParsersAction, shared_parser: argpa
     p.add_argument(
         "--prepend",
         action="store_true",
-        help=(
-            "Prepend directories to your PATH instead of appending. "
-            "This is useful if you want to prioritize pipx apps over system apps."
-        ),
+        help=("Prepend directories to your PATH instead of appending. " "This is useful if you want to prioritize pipx apps over system apps."),
     )
     p.add_argument(
         "--force",
         "-f",
         action="store_true",
-        help=(
-            "Add text to your shell's config file even if it looks like your "
-            "PATH already contains paths to pipx and pipx-install apps."
-        ),
+        help=("Add text to your shell's config file even if it looks like your " "PATH already contains paths to pipx and pipx-install apps."),
     )
 
 
@@ -941,8 +928,7 @@ def get_command_parser() -> Tuple[argparse.ArgumentParser, Dict[str, argparse.Ar
         action="count",
         default=0,
         help=(
-            "Give less output. May be used multiple times corresponding to the"
-            " ERROR and CRITICAL logging levels. The count maxes out at 2."
+            "Give less output. May be used multiple times corresponding to the" " ERROR and CRITICAL logging levels. The count maxes out at 2."
         ),
     )
 
@@ -1017,7 +1003,7 @@ def delete_oldest_logs(file_list: List[Path], keep_number: int) -> None:
 
 
 def _setup_log_file(pipx_log_dir: Optional[Path] = None) -> Path:
-    max_logs = 10
+    max_logs = int(os.getenv("MAX_PIPX_LOGS", 10))
     pipx_log_dir = pipx_log_dir or paths.ctx.logs
     # don't use utils.mkdir, to prevent emission of log message
     pipx_log_dir.mkdir(parents=True, exist_ok=True)
